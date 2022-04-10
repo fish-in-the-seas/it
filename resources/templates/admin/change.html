@@ -1,0 +1,84 @@
+<h3>用户信息修改</h3>
+<!-- 表单 -->
+<form class="layui-form" action="">  
+<!-- 使用隐藏域保存当前项目的ID -->
+<input type="hidden" name="id" th:value=${param.id}>
+
+<!-- 1.用户账号-->
+<div class="layui-form-item">
+  <label class="layui-form-label layui-bg-gray">账号</label>
+   <div class="layui-input-inline">
+      <input type="text" name="code" class="layui-input"
+      th:value="${admin.code}" readonly="readonly"
+      placeholder="请修改公告标题" id="code">
+</div>
+</div>
+
+<!-- 2.用户密码 -->
+<div class="layui-form-item">
+  <label class="layui-form-label layui-bg-gray">密码</label>
+   <div class="layui-input-inline">
+      <input type="text" name="password" class="layui-input"
+      th:value="${admin.password}"
+      placeholder="请修改公告内容" id="password">
+</div>
+</div>
+
+<!-- 3.用户姓名 -->
+<div class="layui-form-item">
+  <label class="layui-form-label layui-bg-gray">姓名</label>
+   <div class="layui-input-inline">
+      <input type="text" name="name" class="layui-input"
+      th:value="${admin.name}"
+      placeholder="请修改用户姓名" id="name">
+</div>
+</div>
+
+<!-- 4.用户权限 -->
+<div class="layui-form-item">
+  <label class="layui-form-label layui-bg-gray">用户权限</label>
+   <div class="layui-input-inline">
+      <input type="text" name="role" class="layui-input"
+      th:value="${admin.role}"
+      placeholder="请修改用户权限" id="role">
+</div>
+</div>
+
+<!-- 5.修改确定按钮 -->
+<div class="layui-form-item">
+    <div class="layui-input-block">
+    <button class="layui-btn" lay-submit lay-filter="change">提交</button>
+    </div>
+</div>
+</form>
+
+
+<script>
+   layui.use(['form'],function(){
+	   var form=layui.form;
+	   //表单的提交操作，改成异步请求的提交
+	   form.on('submit(change)',function(data){
+		   
+		   alert(JSON.stringify(data.field));
+		   $.ajax({
+			    url : '/admin/change', //请求的路径
+			    data : data.field,  //传递的参数
+		        type :'post',
+		        dataType :'json',
+		        success: function(data){
+		        	if(data.code == 0){
+		        	//成功了,跳转到列表页面
+		        	gotoURL('/admin/list');
+		        }else{
+		        	//失败了
+		        	layer.msg(data.msg);
+		        }
+		        }  ,
+		   error:function(){  //失败的回调
+			   layer.msg("请求失败");
+		   }
+		   }); 
+		   return false;//阻止原来的表单的提交动作
+	   });
+   });
+</script>

@@ -1,0 +1,91 @@
+<h3>问题查看</h3>
+<form class="layui-form">
+<div class="layui-form-item">
+<div class="layui-input-inline">
+     <input type="text" name="stu_id" class="layui-input" placeholder="请输入查询账号">
+</div>
+<div>
+     <button class="layui-btn" lay-submit lay-filter="search">搜索</button>
+</div>
+</div>
+</form> 
+<!-- 表格显示项目信息 -->
+<table id = "table" lay-filter="table"></table>
+<!-- JS -->
+<script>
+    layui.use(['table','form'],function(){
+    	var table = layui.table;
+    	form = layui.form,
+    	form.render();
+    	form.on('submit(search)', function(obj){
+			// 刷新表格
+			table.reload('table', {
+				where: obj.field,
+				page: {curr : 1}	// 从第1页开始
+			});
+			return false;
+		});
+    	table.render({
+    		 elem:"#table", //需要渲染的标签
+    		 url:'/question/listx',//数据的请求地址
+    		 method:'post', //请求方式
+    		 page:true,   //开启分页
+    		 cols:[ [     //每一个列
+    			   {field: 'id',title:'ID'},
+    			   {field: 'stu_id',title:'学生账号'},
+    			   {field: 'issue',title:'问题内容'},
+    			   {field: 'plan',title:'是否解决'},
+    			   {field: 'reply',title:'回复'},
+    			   {field: 'start',title:'发布时间'},
+    			   
+    			   
+    		 ] ],
+    	parseData: function(res){
+    		return{
+    			'code':res.code,
+    		    'msg':res.msg,
+    		    'count':res.data.total,
+    		    'data':res.data.list
+    		};
+    	}
+    	});
+    	
+	    //绑定事件
+	    table.on('tool(table)',function(obj){
+	    	if(obj.event =='delete'){
+	    		//alert('删除'+ JSON.stringify(obj.data.id))
+	    		//通过ajax向服务器发送请求，完成删除操作
+	    		layer.confirm('你确定要删除这一条吗',function(index){
+	    			
+	    			//通过ajax向服务器发送请求，完成操作
+	    			$.ajax({
+	    				url : '/question/delete',   //请求的地址
+	    				data : {id: obj.data.id},  //传递的参数
+	    				type : 'post',  //请求的参数
+	    				dataType :'json',  //返回的类型
+	    				success :function(data){
+	    					if(data.code==0)
+	    						{
+	    						 layer.msg('删除成功');
+	    						 
+	    						}else{
+	    							layer.msg('删除失败');
+	    						}
+	    					  //刷新页面，仅仅是这个表格,若不设置参数，会按照之前预设的方法刷新
+	    					  table.reload('table');
+	    					  
+	    				},   //成功的回调
+	    				error : function(){
+	    					alert("请求失败")
+	    				}    //失败的回调
+	    			});
+	    			layer.close(index);
+	    		});
+	    	} else if(obj.event=='edit')
+	    		{
+	    		  //打开编译页面
+	    		  gotoURL("/question/edit?id="+obj.data.id);
+	    		}
+	    });
+    });
+</script>

@@ -1,0 +1,52 @@
+<h3>用户密码修改</h3>
+<!-- 表单 -->
+<form class="layui-form" action="">  
+<!-- 使用隐藏域保存当前用户的ID -->
+<input type="hidden" name="id" th:value="${session.admin.id}">
+<!--密码修改 -->
+
+</div>
+
+<div class="layui-form-item">
+  <label class="layui-form-label layui-bg-gray">密码</label>
+   <div class="layui-input-inline">
+      <input type="text" name="password" class="layui-input"
+      placeholder="请修改密码" id="password">
+</div>
+</div>
+
+<div class="layui-form-item">
+    <div class="layui-input-block">
+    <button class="layui-btn" lay-submit lay-filter="edit">提交</button>
+    </div>
+</div>
+</form>
+<script>
+   layui.use(['form'],function(){
+	   var form=layui.form;
+	   //表单的提交操作，改成异步请求的提交
+	   form.on('submit(edit)',function(data){
+		   
+		   alert(JSON.stringify(data.field));
+		   $.ajax({
+			    url : '/admin/edit', //请求的路径
+			    data : data.field,  //传递的参数
+		        type :'post',
+		        dataType :'json',
+		        success: function(data){
+		        	if(data.code == 0){
+		        	//成功了,跳转到列表页面
+		        	window.location.href="/";
+		        }else{
+		        	//失败了
+		        	layer.msg(data.msg);
+		        }
+		        }  ,
+		   error:function(){  //失败的回调
+			   layer.msg("请求失败");
+		   }
+		   }); 
+		   return false;//阻止原来的表单的提交动作
+	   });
+   });
+</script>

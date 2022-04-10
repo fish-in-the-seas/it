@@ -1,0 +1,77 @@
+<h3>修改课程</h3>
+<!-- 表单 -->
+<form class="layui-form" action="">  
+<!-- 使用隐藏域保存当前项目的ID -->
+<input type="hidden" name="id" th:value=${param.id}>
+
+<!-- 1.课程名-->
+<div class="layui-form-item">
+  <label class="layui-form-label layui-bg-gray">课程名</label>
+   <div class="layui-input-inline">
+      <input type="text" name="cname" class="layui-input"
+      th:value="${course.cname}"
+      placeholder="请修改公告标题" id="cname">
+</div>
+</div>
+
+<!-- 2.上课时间 -->
+<div class="layui-form-item">
+  <label class="layui-form-label layui-bg-gray">上课时间</label>
+   <div class="layui-input-inline">
+      <input type="text" name="ctime" class="layui-input"
+      th:value="${course.ctime}"
+      placeholder="请修改上课时间" id="ctime">
+</div>
+</div>
+
+<!-- 3.上课地址 -->
+<div class="layui-form-item">
+  <label class="layui-form-label layui-bg-gray">上课地址</label>
+   <div class="layui-input-inline">
+      <input type="text" name="clocation" class="layui-input"
+      th:value="${course.clocation}"
+      placeholder="请修改上课地址" id="clocation">
+</div>
+</div>
+
+
+<!-- 4.修改确定按钮 -->
+<div class="layui-form-item">
+    <div class="layui-input-block">
+    <button class="layui-btn" lay-submit lay-filter="edit">提交</button>
+    </div>
+</div>
+</form>
+
+
+<script>
+   layui.use(['form','laydate'],function(){
+	   var form=layui.form,
+	   laydate=layui.laydate;
+	   laydate.render({elem:'#time',type: 'date'});
+	   //表单的提交操作，改成异步请求的提交
+	   form.on('submit(edit)',function(data){
+		   
+		   alert(JSON.stringify(data.field));
+		   $.ajax({
+			    url : '/course/edit', //请求的路径
+			    data : data.field,  //传递的参数
+		        type :'post',
+		        dataType :'json',
+		        success: function(data){
+		        	if(data.code == 0){
+		        	//成功了,跳转到列表页面
+		        	gotoURL('/course/list');
+		        }else{
+		        	//失败了
+		        	layer.msg(data.msg);
+		        }
+		        }  ,
+		   error:function(){  //失败的回调
+			   layer.msg("请求失败");
+		   }
+		   }); 
+		   return false;//阻止原来的表单的提交动作
+	   });
+   });
+</script>

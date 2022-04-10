@@ -1,0 +1,76 @@
+<h3>修改项目</h3>
+<!-- 表单 -->
+<form class="layui-form" action="">  
+<!-- 使用隐藏域保存当前项目的ID -->
+<input type="hidden" name="id" th:value=${param.id}>
+
+<!-- 1.公告标题-->
+<div class="layui-form-item">
+  <label class="layui-form-label layui-bg-gray">公告标题</label>
+   <div class="layui-input-inline">
+      <input type="text" name="title" class="layui-input"
+      th:value="${notice.title}"
+      placeholder="请修改公告标题" id="title">
+</div>
+</div>
+
+<!-- 2.公告内容 -->
+<div class="layui-form-item">
+  <label class="layui-form-label layui-bg-gray">公告内容</label>
+   <div class="layui-input-inline">
+      <input type="text" name="main" class="layui-input"
+      th:value="${notice.main}"
+      placeholder="请修改公告内容" id="main">
+</div>
+</div>
+
+<!-- 3.公告发布时间 -->
+<div class="layui-form-item">
+  <label class="layui-form-label layui-bg-gray">发布时间</label>
+   <div class="layui-input-inline">
+      <input type="text" name="time" class="layui-input"
+      th:value="${#dates.format(notice.time,'yyyy-MM-dd')}"
+      placeholder="请修改公告发布时间" id="time">
+</div>
+</div>
+
+<!-- 4.修改确定按钮 -->
+<div class="layui-form-item">
+    <div class="layui-input-block">
+    <button class="layui-btn" lay-submit lay-filter="edit">提交</button>
+    </div>
+</div>
+</form>
+
+
+<script>
+   layui.use(['form','laydate'],function(){
+	   var form=layui.form,
+	   laydate=layui.laydate;
+	   laydate.render({elem:'#time',type: 'date'});
+	   //表单的提交操作，改成异步请求的提交
+	   form.on('submit(edit)',function(data){
+		   
+		   alert(JSON.stringify(data.field));
+		   $.ajax({
+			    url : '/notice/edit', //请求的路径
+			    data : data.field,  //传递的参数
+		        type :'post',
+		        dataType :'json',
+		        success: function(data){
+		        	if(data.code == 0){
+		        	//成功了,跳转到列表页面
+		        	gotoURL('/notice/list');
+		        }else{
+		        	//失败了
+		        	layer.msg(data.msg);
+		        }
+		        }  ,
+		   error:function(){  //失败的回调
+			   layer.msg("请求失败");
+		   }
+		   }); 
+		   return false;//阻止原来的表单的提交动作
+	   });
+   });
+</script>

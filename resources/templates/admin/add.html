@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>用户注册</title>
+<link rel="stylesheet" href="/layui/css/layui.css">
+  <style>
+  body{
+       background-image: url('/layui/images/test5.jpeg')
+  }
+  form{
+        width: 400px;
+  		margin: 150px auto;
+  		border-radius: 10px;
+  		background-color: rgba(255,255,255,0.2);
+  		padding: 20px;
+      }
+  h1{
+     line-height: 80px;
+     text-align: center;
+  }
+  button{
+     width: 180px;
+  }
+  </style>
+</head>
+<body>
+  <div>
+    <form class="layui-form" method="post">
+       <h1>用户注册</h1>
+       <!-- 账号输入框 -->
+      <div class="layui-form-item">
+          <label class="layui-form-label">账号</label>      
+          <div class="layui-input-inline">
+          <input type="text" name="code"  class="layui-input" placeholder="请输入账号，必须为4位数字">
+          </div>
+      </div>
+      <!-- 密码输入框 -->
+      <div class="layui-form-item">
+          <label class="layui-form-label">密码</label>      
+          <div class="layui-input-inline">
+          <input type="text" name="password"  class="layui-input" placeholder="请输入密码">
+          </div>
+      </div>
+      <!-- 用户名输入框 -->
+      <div class="layui-form-item">
+          <label class="layui-form-label">姓名</label>      
+          <div class="layui-input-inline">
+          <input type="text" name="name"  class="layui-input" placeholder="请输入密码">
+          </div>
+      </div>
+      <!-- 验证码输入框 -->
+      <div class="layui-form-item">
+          <label class="layui-form-label">验证码</label>      
+          <div class="layui-input-inline">
+          <input type="text" name="vercode"  class="layui-input" placeholder="请输入验证码" style="width:85px; display: inline-block;">
+          <!-- 显示验证码 -->
+          <img src="/admin/vercode">
+          </div>
+      </div>
+      <!-- 登录按钮 -->
+      <div class="layui-form-item">
+        <div class="layui-input-block">
+        <button type="submit" class="layui-btn">注册</button>
+        <!-- 错误提示 -->
+        <span th:text="${error}" style="color:red">
+        </span>
+        </div>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<h3>添加公告</h3>
+<!-- form表单 -->
+<form class="layui-form" action="">  
+<!-- 公告标题，公告内容，发布时间 -->
+<!-- 1.公告标题 -->
+<div class="layui-form-item">
+  <label class="layui-form-label ">公告标题</label>
+   <div class="layui-input-inline">
+      <input type="text" name="title" class="layui-input"
+      placeholder="请输入公告标题" id="title">
+</div>
+</div>
+
+<!-- 2.公告内容 -->
+<div class="layui-form-item">
+  <label class="layui-form-label">公告内容</label>
+   <div class="layui-input-inline">
+      <input type="text" name="main" class="layui-input"
+      placeholder="请输入公告的内容" id="main">
+</div>
+</div>
+
+<!-- 公告发布时间 -->
+<div class="layui-form-item">
+  <label class="layui-form-label">发布时间</label>
+   <div class="layui-input-inline">
+      <input type="text" name="time" class="layui-input"
+      placeholder="请输入公告发布时间" id="time">
+</div>
+</div>
+
+<!-- 公告发布按钮 -->
+<div class="layui-form-item">
+    <div class="layui-input-block">
+    <button class="layui-btn" lay-submit lay-filter="add">发布</button>
+    </div>
+</div>
+</form>
+
+
+<script>
+   layui.use(['form','laydate'],function(){
+	   var form=layui.form,
+	   laydate=layui.laydate;
+	   laydate.render({elem:'#time',type: 'date'});
+	   //表单的提交操作，改成异步请求的提交
+	   form.on('submit(add)',function(data){
+		   
+		   alert(JSON.stringify(data.field));
+		   $.ajax({
+			    url : '/notice/add', //请求的路径
+			    data : data.field,  //传递的参数
+		        type :'post',
+		        dataType :'json',
+		        success: function(data){
+		        	if(data.code==0){
+			        	//成功了,跳转到列表页面
+			        	gotoURL('/notice/list');
+			        }else{
+			        	//失败了
+			        	layer.msg(data.msg);
+			        }
+		        }  ,
+			   error:function(){  //失败的回调
+				   layer.msg("请求失败");
+			   }
+		   }); 
+		   return false;//阻止原来的表单的提交动作
+	   });
+   });
+</script>

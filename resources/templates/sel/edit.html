@@ -1,0 +1,74 @@
+<h3>修改选课信息和课程打分</h3>
+<!-- 表单 -->
+<form class="layui-form" action="">  
+<!-- 使用隐藏域保存当前项目的ID -->
+<input type="hidden" name="id" th:value=${param.id}>
+
+<!-- 1.学生ID-->
+<div class="layui-form-item">
+  <label class="layui-form-label layui-bg-gray">学生ID</label>
+   <div class="layui-input-inline">
+      <input type="text" name="stu_id" class="layui-input"
+      th:value="${sel.stu_id}" readonly="readonly"
+      placeholder="请修改公告标题" id="stu_id">
+</div>
+</div>
+
+<!-- 2.课程ID -->
+<div class="layui-form-item">
+  <label class="layui-form-label layui-bg-gray">课程ID</label>
+   <div class="layui-input-inline">
+      <input type="text" name="cou_id" class="layui-input"
+      th:value="${sel.cou_id}"
+      placeholder="请修改公告内容" id="cou_id">
+</div>
+</div>
+
+<!-- 3.课程成绩 -->
+<div class="layui-form-item">
+  <label class="layui-form-label layui-bg-gray">课程成绩</label>
+   <div class="layui-input-inline">
+      <input type="text" name="score" class="layui-input"
+      th:value="${sel.score}"
+      placeholder="请修改课程成绩" id="score">
+</div>
+</div>
+
+<!-- 4.修改确定按钮 -->
+<div class="layui-form-item">
+    <div class="layui-input-block">
+    <button class="layui-btn" lay-submit lay-filter="edit">提交</button>
+    </div>
+</div>
+</form>
+
+
+<script>
+   layui.use(['form'],function(){
+	   var form=layui.form;
+	   //表单的提交操作，改成异步请求的提交
+	   form.on('submit(edit)',function(data){
+		   
+		   alert(JSON.stringify(data.field));
+		   $.ajax({
+			    url : '/sel/edit', //请求的路径
+			    data : data.field,  //传递的参数
+		        type :'post',
+		        dataType :'json',
+		        success: function(data){
+		        	if(data.code == 0){
+		        	//成功了,跳转到列表页面
+		        	gotoURL('/sel/list');
+		        }else{
+		        	//失败了
+		        	layer.msg(data.msg);
+		        }
+		        }  ,
+		   error:function(){  //失败的回调
+			   layer.msg("请求失败");
+		   }
+		   }); 
+		   return false;//阻止原来的表单的提交动作
+	   });
+   });
+</script>

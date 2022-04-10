@@ -1,0 +1,26 @@
+#项目的配置文件
+
+#端口号
+server:  port: 8081
+  
+  
+#项目的路径    一般不配置
+  #servlet:
+    #context-path: /demo/
+  
+#数据库
+spring:  datasource:
+    ##驱动程序    driver-class-name: com.mysql.cj.jdbc.Driver 
+    ##数据库的连接字符串jdbc方式连接mysql数据库
+    url: jdbc:mysql://127.0.0.1:3306/learn?serverTimezone=GMT%2b8&useUnicode=true&characterEncoding=utf8
+    ##数据库的账号
+    username: root
+    ##数据库的密码
+    password: lhj0808...
+    
+# thymeleaf的配置
+  thymeleaf:
+    cache: false #关闭缓存
+    prefix: classpath:/templates/  #解析视图时的前缀
+    suffix: .html     #解析视图时的后缀
+    
